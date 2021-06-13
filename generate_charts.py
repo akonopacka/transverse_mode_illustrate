@@ -2,6 +2,7 @@ import numpy as np
 import math
 from scipy.special import jv,kn
 from matplotlib import pyplot as plt
+import matplotlib.animation 
 
 def pyfindpeaks( environment, valuelist , thresh):
     """Determine peak positions in a list or array of real values.
@@ -131,6 +132,9 @@ def calculate_v(lambda_, a, NA):
 
 def get_chart(lambda_, a, NA):
 
+    plt.cla()
+    plt.clf()
+    plt.close('all')
     V = calculate_v(lambda_, a, NA)
 
     print("Generate charts for: ")
@@ -144,8 +148,10 @@ def get_chart(lambda_, a, NA):
     mmax = 5  
 
     charts = []
-
+    
     m = 1
+    # fig, ax = plt.subplots()
+
     for m in range(mmax+1):
         intersects = get_intersects(m, V)
         print("\nm=%d, # of intersections: %d\n"%(m, len(intersects)))
@@ -157,7 +163,13 @@ def get_chart(lambda_, a, NA):
             y = x
 
             m01 = besselmode(m, u, w, x, y)
-            figure = plt.figure()
+
+            
+
+            figure = plt.figure(figsize = (2.5,2.5))
+            title = intersect[2]
+            figure.suptitle(title)
+            
             plt.imshow(m01, extent=(min(x), max(x), min(y), max(y)), clim=[-1,1], cmap='bwr')
             plt.colorbar()
             charts.append(figure)

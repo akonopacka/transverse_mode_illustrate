@@ -4,7 +4,10 @@ import PySimpleGUI as sg
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.tri as tri
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.backends.backend_tkagg import (
+    FigureCanvasTkAgg, NavigationToolbar2Tk)
+
+import tkinter
 
 from generate_charts import besselmode, get_chart
 matplotlib.use("TkAgg")
@@ -13,7 +16,7 @@ matplotlib.use("TkAgg")
 _lambda = 0.9
 _a = 10
 _NA = 0.1
-
+_charts = []
 
 def check_input_values(values):
 
@@ -36,18 +39,46 @@ def check_input_values(values):
     return True
 
 
-def get_mode_field_figure(lambda_, a, NA):
+def get_mode_field_figure(lambda_, a, NA, fig):
+    
+    for c in _charts:
+        c.get_tk_widget().pack_forget()
     figures = get_chart(lambda_, a, NA)
 
-    if figures!=[]:
-        fig = figures[0]
+
+    print(figures)
+
+    fig = draw_figures(window["-CANVAS-"].TKCanvas, figures)
+
     return fig
+    
+    # counter = 0
+    # if figures!=[]:
+    #     for fig in figures:
+    #         if counter%2 ==0:
+    #             draw_figure(window["-CANVAS-"].TKCanvas, fig, "bottom")
+    #         else:
+    #             draw_figure(window["-CANVAS-"].TKCanvas, fig, "left")
 
-
-def draw_figure(canvas, figure):
+def draw_figure(canvas, figure, location):
     figure_canvas_agg = FigureCanvasTkAgg(figure, canvas)
+    
+    # figure_canvas_agg.get_tk_widget().grid(row="2", column="2", columnspan="3", sticky="news")
+
     figure_canvas_agg.draw()
-    figure_canvas_agg.get_tk_widget().pack(side="top", fill="both", expand=1)
+    figure_canvas_agg.get_tk_widget().pack(side=location, fill="both", padx=2)
+    # figure_canvas_agg.get_tk_widget().pack(side="left", fill="both", expand=1)
+    
+
+    return figure_canvas_agg
+
+def draw_figures(canvas, figures):
+    for fig in figures:
+        figure_canvas_agg = FigureCanvasTkAgg(fig, canvas)
+        figure_canvas_agg.draw()
+        figure_canvas_agg.get_tk_widget().pack(side="top", fill="both", expand=1)
+        _charts.append(figure_canvas_agg)
+
     return figure_canvas_agg
 
 
@@ -72,7 +103,7 @@ window = sg.Window(
     font="Helvetica 16",
 )
 
-
+fig = None
 not_finished = True
 while not_finished:
     event, values = window.read()
@@ -83,7 +114,8 @@ while not_finished:
 
     if event == "Symulacja":
         is_valid = check_input_values(values)
-        draw_figure(window["-CANVAS-"].TKCanvas, get_mode_field_figure(_lambda, _a, _NA))
+        # window["-CANVAS-"].TKCanvas.pack_forget()
+        fig = get_mode_field_figure(_lambda, _a, _NA, fig)
 
 window.close()
 
