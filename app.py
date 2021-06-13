@@ -76,11 +76,13 @@ window = sg.Window(
     "Projekt SOIB",
     layout,
     location=(0, 0),
+    size=(1900, 900),
     finalize=True,
     element_justification="center",
     font="Helvetica 16",
     resizable=True,
 )
+
 
 not_finished = True
 while not_finished:
