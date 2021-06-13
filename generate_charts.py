@@ -126,16 +126,22 @@ def besselmode(m, u, w, x, y, phioff=0):
 
 def calculate_v(lambda_, a, NA):
     v = (2 * math.pi * (a/2) * NA) / lambda_
-    print("Value of V-number :", v)
-    print()
     return v
 
 
 def get_chart(lambda_, a, NA):
+
     V = calculate_v(lambda_, a, NA)
 
+    print("Generate charts for: ")
+    print("Lambda: ", lambda_)
+    print("a: ", a)
+    print("NA: ", NA)
+    print("Value of V-number :", V)
+    print()
+
     # look for LP modes up to LP_mmax,x
-    mmax = 1  
+    mmax = 3  
 
     # for m in range(mmax+1):
     #     intersects = get_intersects(m, V)
@@ -156,7 +162,8 @@ def get_chart(lambda_, a, NA):
         intersect = intersects[0]
         u = intersect[0]
         w = intersect[1]
-        print("  %s u=%.3f w=%.3f"%(intersect[2], u, w))
+        print("%s u=%.3f w=%.3f"%(intersect[2], u, w))
+        print()
 
         m01 = besselmode(m, u, w, x, y)
         figure = plt.figure()

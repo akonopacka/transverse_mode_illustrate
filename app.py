@@ -17,15 +17,13 @@ _NA = 0.1
 
 def check_input_values(values):
 
+    global _lambda
+    global _a
+    global _NA
+
     lambda_ = values['-LAMBDA-']
     a = values['-A-']
     NA = values['-NA-']
-
-    print("Parametry symulacji:")
-    print("Lambda:  ",lambda_, " µm")
-    print("a:       ",a, " µm")
-    print("NA:      ",NA)
-    print()
 
     try:
         _lambda = float(lambda_)
@@ -34,6 +32,7 @@ def check_input_values(values):
     except:
         print("Input values couldn't be converted.")
         return False
+
     return True
 
 
@@ -80,7 +79,6 @@ while not_finished:
         break
 
     if event == "Symulacja":
-        event, values = window.read()
         is_valid = check_input_values(values)
         draw_figure(window["-CANVAS-"].TKCanvas, get_mode_field_figure(_lambda, _a, _NA))
 
