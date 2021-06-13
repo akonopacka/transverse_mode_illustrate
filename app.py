@@ -37,7 +37,10 @@ def check_input_values(values):
 
 
 def get_mode_field_figure(lambda_, a, NA):
-    fig = get_chart(lambda_, a, NA)
+    figures = get_chart(lambda_, a, NA)
+
+    if figures!=[]:
+        fig = figures[0]
     return fig
 
 

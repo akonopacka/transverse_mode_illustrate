@@ -138,38 +138,53 @@ def get_chart(lambda_, a, NA):
     print("a: ", a)
     print("NA: ", NA)
     print("Value of V-number :", V)
-    print()
+
 
     # look for LP modes up to LP_mmax,x
-    mmax = 3  
+    mmax = 5  
 
-    # for m in range(mmax+1):
-    #     intersects = get_intersects(m, V)
-    #     print("\nm=%d, # of intersections: %d\n"%(m, len(intersects)))
-    #     for intersect in intersects:
-    #         print("  %s u=%.3f w=%.3f"%(intersect[2], intersect[0], intersect[1]))
+    charts = []
 
-        # x-and y vector for the modes to be calculated
-    x = np.linspace(-2,2,500)   # in units of a
-    y = x 
+    m = 1
+    for m in range(mmax+1):
+        intersects = get_intersects(m, V)
+        print("\nm=%d, # of intersections: %d\n"%(m, len(intersects)))
+        for intersect in intersects:
+            u = intersect[0]
+            w = intersect[1]
+            print("  %s u=%.3f w=%.3f"%(intersect[2], intersect[0], intersect[1]))
+            x = np.linspace(-2,2,500)   # in units of a
+            y = x
 
-    # LP01 mode
-    m=1
-    intersects = get_intersects(m, V)
-    print("Calculation: ",intersects)
-    print()
-    if intersects!=[]:
-        intersect = intersects[0]
-        u = intersect[0]
-        w = intersect[1]
-        print("%s u=%.3f w=%.3f"%(intersect[2], u, w))
-        print()
+            m01 = besselmode(m, u, w, x, y)
+            figure = plt.figure()
+            plt.imshow(m01, extent=(min(x), max(x), min(y), max(y)), clim=[-1,1], cmap='bwr')
+            plt.colorbar()
+            charts.append(figure)
 
-        m01 = besselmode(m, u, w, x, y)
-        figure = plt.figure()
-        plt.imshow(m01, extent=(min(x), max(x), min(y), max(y)), clim=[-1,1], cmap='bwr')
-        plt.colorbar()
+    return charts
 
-        return figure
-    else:
-        return None
+
+    # x = np.linspace(-2,2,500)   # in units of a
+    # y = x 
+
+    # # LP01 mode
+    # m=1
+    # intersects = get_intersects(m, V)
+    # print("Calculation: ",intersects)
+    # print()
+    # if intersects!=[]:
+    #     intersect = intersects[0]
+    #     u = intersect[0]
+    #     w = intersect[1]
+    #     print("%s u=%.3f w=%.3f"%(intersect[2], u, w))
+    #     print()
+
+    #     m01 = besselmode(m, u, w, x, y)
+    #     figure = plt.figure()
+    #     plt.imshow(m01, extent=(min(x), max(x), min(y), max(y)), clim=[-1,1], cmap='bwr')
+    #     plt.colorbar()
+
+    #     return figure
+    # else:
+    #     return None
