@@ -27,7 +27,6 @@ def check_input_values(values):
     lambda_ = values['-LAMBDA-']
     a = values['-A-']
     NA = values['-NA-']
-
     try:
         _lambda = float(lambda_)
         _a = float(a)
@@ -35,51 +34,31 @@ def check_input_values(values):
     except:
         print("Input values couldn't be converted.")
         return False
-
     return True
 
 
-def get_mode_field_figure(lambda_, a, NA, fig):
-    
+def get_mode_field_figure(lambda_, a, NA):
     for c in _charts:
         c.get_tk_widget().pack_forget()
     figures = get_chart(lambda_, a, NA)
+    print(figures, "\n")
+   
+    draw_figures(window["-CANVAS-"].TKCanvas, figures)
 
-
-    print(figures)
-
-    fig = draw_figures(window["-CANVAS-"].TKCanvas, figures)
-
-    return fig
-    
-    # counter = 0
-    # if figures!=[]:
-    #     for fig in figures:
-    #         if counter%2 ==0:
-    #             draw_figure(window["-CANVAS-"].TKCanvas, fig, "bottom")
-    #         else:
-    #             draw_figure(window["-CANVAS-"].TKCanvas, fig, "left")
-
-def draw_figure(canvas, figure, location):
-    figure_canvas_agg = FigureCanvasTkAgg(figure, canvas)
-    
-    # figure_canvas_agg.get_tk_widget().grid(row="2", column="2", columnspan="3", sticky="news")
-
-    figure_canvas_agg.draw()
-    figure_canvas_agg.get_tk_widget().pack(side=location, fill="both", padx=2)
-    # figure_canvas_agg.get_tk_widget().pack(side="left", fill="both", expand=1)
-    
-
-    return figure_canvas_agg
 
 def draw_figures(canvas, figures):
-    for fig in figures:
-        figure_canvas_agg = FigureCanvasTkAgg(fig, canvas)
-        figure_canvas_agg.draw()
-        figure_canvas_agg.get_tk_widget().pack(side="top", fill="both", expand=1)
-        _charts.append(figure_canvas_agg)
 
-    return figure_canvas_agg
+    counter = 0
+    row = 0
+    for fig in figures:
+        row_ = int(counter/5)
+        figure_canvas_agg = FigureCanvasTkAgg(fig, canvas)
+        figure_canvas_agg.get_tk_widget().grid(row=row_, column=counter%5, padx=5, pady=5)
+        figure_canvas_agg.draw()
+
+        _charts.append(figure_canvas_agg)
+        counter = counter + 1
+
 
 
 # Define the window layout
@@ -94,16 +73,15 @@ layout = [
 
 # Create the form and show it without the plot
 window = sg.Window(
-    "Matplotlib Single Graph",
+    "Projekt SOIB",
     layout,
     location=(0, 0),
-    # margins=(100, 100),
     finalize=True,
     element_justification="center",
     font="Helvetica 16",
+    resizable=True,
 )
 
-fig = None
 not_finished = True
 while not_finished:
     event, values = window.read()
@@ -114,8 +92,7 @@ while not_finished:
 
     if event == "Symulacja":
         is_valid = check_input_values(values)
-        # window["-CANVAS-"].TKCanvas.pack_forget()
-        fig = get_mode_field_figure(_lambda, _a, _NA, fig)
+        get_mode_field_figure(_lambda, _a, _NA)
 
 window.close()
 

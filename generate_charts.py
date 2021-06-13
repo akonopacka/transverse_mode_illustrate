@@ -149,8 +149,7 @@ def get_chart(lambda_, a, NA):
 
     charts = []
     
-    m = 1
-    # fig, ax = plt.subplots()
+    m = 5
 
     for m in range(mmax+1):
         intersects = get_intersects(m, V)
@@ -164,8 +163,6 @@ def get_chart(lambda_, a, NA):
 
             m01 = besselmode(m, u, w, x, y)
 
-            
-
             figure = plt.figure(figsize = (2.5,2.5))
             title = intersect[2]
             figure.suptitle(title)
@@ -176,27 +173,3 @@ def get_chart(lambda_, a, NA):
 
     return charts
 
-
-    # x = np.linspace(-2,2,500)   # in units of a
-    # y = x 
-
-    # # LP01 mode
-    # m=1
-    # intersects = get_intersects(m, V)
-    # print("Calculation: ",intersects)
-    # print()
-    # if intersects!=[]:
-    #     intersect = intersects[0]
-    #     u = intersect[0]
-    #     w = intersect[1]
-    #     print("%s u=%.3f w=%.3f"%(intersect[2], u, w))
-    #     print()
-
-    #     m01 = besselmode(m, u, w, x, y)
-    #     figure = plt.figure()
-    #     plt.imshow(m01, extent=(min(x), max(x), min(y), max(y)), clim=[-1,1], cmap='bwr')
-    #     plt.colorbar()
-
-    #     return figure
-    # else:
-    #     return None
